@@ -22,7 +22,7 @@ public class ProdutoService implements ProdutoIService {
 
     private final ProdutoRepository produtoRepository;
 
-    //Usando paginação para encontrar todos os usuarios ?size=3
+    //Usando paginação para encontrar todos os produtos ?size=3
     public Page<Produto> findAll(Pageable pageable) {
         LOGGER.info("Buscando todos os produtos");
         return produtoRepository.findAll(pageable);

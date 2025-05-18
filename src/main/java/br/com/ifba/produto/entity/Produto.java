@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Table(name = "produtos")
 @EqualsAndHashCode(callSuper = false)
 @Builder
-//Entidade de usuario com seus atributos
+//Entidade de produtos com seus atributos
 public class Produto extends PersistenceEntity implements Serializable {
 
     @Column(name = "nome", nullable = false)
