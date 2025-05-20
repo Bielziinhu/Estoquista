@@ -1,13 +1,7 @@
 package br.com.ifba.produto.entity;
 
-import br.com.ifba.infrastructure.entity.PersistenceEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
-
-import java.io.Serializable;
-
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +11,12 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @Builder
 //Entidade de produtos com seus atributos
-public class Produto extends PersistenceEntity implements Serializable {
+public class Produto {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Exclude
+    private Long id;
     @Column(name = "nome", nullable = false)
     private String nome;
 
@@ -27,6 +25,5 @@ public class Produto extends PersistenceEntity implements Serializable {
 
     @Column(name = "quantidade")
     private int quantidade;
-
 
 }
