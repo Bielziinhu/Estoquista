@@ -42,8 +42,9 @@ public class ProdutoService implements ProdutoIService {
 
 
     public void delete(Long id) {
-        log.info("Deletando produto");
-        produtoRepository.deleteById(id);
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("Produto não encontrado"));
+        produtoRepository.delete(produto);
     }
 
     public Produto update(Long id, Produto produto) {

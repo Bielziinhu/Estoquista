@@ -62,6 +62,7 @@ class ProdutoServiceTest {
         log.info("Produto salvo: {}", salvo);
 
         //Verificando se o produto foi salvo corretamente
+        //Garante que o produto não é nulo e é igual ao produto salvo
         assertNotNull(salvo);
         assertEquals(produtoSalvo, salvo);
         verify(produtoRepository, times(1)).save(produto);
@@ -77,6 +78,7 @@ class ProdutoServiceTest {
         log.info("Produto encontrado: {}", encontrado);
 
         //Verificando se o produto foi encontrado corretamente
+        //Garante que o produto não é nulo e é igual ao produto salvo
         assertNotNull(encontrado);
         assertEquals(produtoSalvo, encontrado);
         verify(produtoRepository).findById(1L);
@@ -89,6 +91,7 @@ class ProdutoServiceTest {
         when(produtoRepository.findById(2L)).thenReturn(Optional.empty());
 
         //Verificando se a exceção é lançada quando o produto não é encontrado
+        //Garante que a exceção é lançada
         BusinessException ex = assertThrows(BusinessException.class, () -> produtoService.findById(2L));
         log.info("Exceção lançada: {}", ex.getMessage());
     }
@@ -104,9 +107,10 @@ class ProdutoServiceTest {
         when(produtoRepository.save(any(Produto.class))).thenReturn(produtoAtualizado);
 
         Produto atualizado = produtoService.update(id, novoProduto);
-        log.info("Produto atualizado: {}", atualizado);
+        log.info("Produto atualizado: {} ", atualizado);
 
         //Verificando se o produto foi atualizado corretamente
+        //Garante que o produto não é nulo e é igual ao produto salvo
         assertNotNull(atualizado);
         assertEquals("Feijão", atualizado.getNome());
         assertEquals("Pacote de feijão", atualizado.getDescricao());
@@ -119,11 +123,15 @@ class ProdutoServiceTest {
 
         Long id = 1L;
 
-        produtoService.delete(id);
+        when(produtoRepository.findById(id)).thenReturn(Optional.of(produtoSalvo));
+        doNothing().when(produtoRepository).delete(produtoSalvo);
+
+        //Verifica se o metodo não lança exceção
+        assertDoesNotThrow(() -> produtoService.delete(id));
         log.info("Deletando Produto com ID: {}", id);
 
         //Verificando se o método deleteById foi chamado corretamente
-        verify(produtoRepository).deleteById(id);
+        verify(produtoRepository, times(1)).delete(produtoSalvo);
     }
 
     @Test
@@ -134,7 +142,7 @@ class ProdutoServiceTest {
         when(produtoRepository.findAll(pageable)).thenReturn(produtosPage);
 
         Page<Produto> resultado = produtoService.findAll(pageable);
-        log.info("Página de produtos: {}", resultado.getContent());
+        log.info("Todos os Produtos: {} ", resultado.getContent());
 
         //Verificando se a lista de produtos foi retornada corretamente
         assertNotNull(resultado);
